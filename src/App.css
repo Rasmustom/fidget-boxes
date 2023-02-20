@@ -3,6 +3,10 @@ html, body {
   padding: 0;
 }
 
+body {
+  position: relative;
+}
+
 a {
   padding: 5px;
   text-decoration: none;
@@ -32,3 +36,6 @@ svg {
   align-items: center;
 }
 
+#static-lines-svg {
+  position: absolute;
+}

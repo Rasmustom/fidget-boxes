@@ -18,6 +18,8 @@ function App() {
     return (
         <div className="boxes">
             <svg xmlns="http://www.w3.org/2000/svg" height="100%" width="100%">
+                {/* <line id="line2" x1="1000" y1="1000" x2="1200" y2="1200" stroke="black" stroke-width="1" /> */}
+
                 <line id="line" x1="0" y1="0" x2="0" y2="0" stroke="black" stroke-width="1" />
             </svg>
 
