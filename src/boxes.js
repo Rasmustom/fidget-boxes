@@ -1,3 +1,5 @@
+const svgLink = 'http://www.w3.org/2000/svg';
+
 let boxPositions = [];
 
 export function start() {
@@ -55,7 +57,8 @@ function getDistance(pointA, pointB) {
 
 function addStaticLine(_event) {
     const line = document.querySelector('#line').cloneNode(true);
-    const container = document.querySelector('#static-lines-svg');
+    const svgContainer = document.querySelector('#static-lines-svg');
+    const container = document.createElementNS(svgLink, 'g');
 
     const linePointA = { x: Number(line.getAttribute('x1')), y: Number(line.getAttribute('y1')) };
     const linePointB = { x: Number(line.getAttribute('x2')), y: Number(line.getAttribute('y2')) };
@@ -79,14 +82,21 @@ function addStaticLine(_event) {
     line.setAttribute('x1', x1);
     line.setAttribute('x2', x2);
 
-    let newText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    newText.setAttribute('x', xMid);
-    newText.setAttribute('y', yMid);
-    newText.setAttribute('text-anchor', 'middle');
-    newText.setAttribute('alignment-baseline', 'after-edge');
-    newText.setAttribute(`transform`, `rotate(${angleWithSign}, ${xMid},${yMid})`);
-    newText.innerHTML = `Length: ${lineLength}`;
+    let text = document.createElementNS(svgLink, 'text');
+    text.setAttribute('x', xMid);
+    text.setAttribute('y', yMid);
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('alignment-baseline', 'after-edge');
+    text.setAttribute(`transform`, `rotate(${angleWithSign}, ${xMid},${yMid})`);
+    text.innerHTML = `Length: ${lineLength}`;
+
+    let circle = document.createElementNS(svgLink, 'circle');
+    circle.setAttribute('cx', x1);
+    circle.setAttribute('cy', y1);
+    circle.setAttribute('r', 3);
 
     container.appendChild(line);
-    container.appendChild(newText);
+    container.appendChild(text);
+    container.appendChild(circle);
+    svgContainer.appendChild(container);
 }
