@@ -6,7 +6,7 @@ export function start() {
     getBoxes();
     document.onmousemove = moveCursor;
     document.onwheel = moveCursor;
-    document.onclick = addStaticLine;
+    document.onclick = drawStaticLine;
 }
 
 function getBoxes() {
@@ -55,21 +55,21 @@ function getDistance(pointA, pointB) {
     return Math.sqrt(d1 + d2);
 }
 
-function addStaticLine(_event) {
+function drawStaticLine(_event) {
     const line = document.querySelector('#line').cloneNode(true);
     const svgContainer = document.querySelector('#static-lines-svg');
     const container = document.createElementNS(svgLink, 'g');
 
-    const linePointA = { x: Number(line.getAttribute('x1')), y: Number(line.getAttribute('y1')) };
-    const linePointB = { x: Number(line.getAttribute('x2')), y: Number(line.getAttribute('y2')) };
+    const linePointCursor = { x: Number(line.getAttribute('x1')), y: Number(line.getAttribute('y1')) };
+    const linePointBox = { x: Number(line.getAttribute('x2')), y: Number(line.getAttribute('y2')) };
 
-    const lineLength = Math.round(getDistance(linePointA, linePointB) * 10) / 10;
+    const lineLength = Math.round(getDistance(linePointCursor, linePointBox) * 10) / 10;
 
     // These are needed to account for screen scroll
-    const x1 = linePointA.x + document.documentElement.scrollLeft;
-    const x2 = linePointB.x + document.documentElement.scrollLeft;
-    const y1 = linePointA.y + document.documentElement.scrollTop;
-    const y2 = linePointB.y + document.documentElement.scrollTop;
+    const x1 = linePointCursor.x + document.documentElement.scrollLeft;
+    const x2 = linePointBox.x + document.documentElement.scrollLeft;
+    const y1 = linePointCursor.y + document.documentElement.scrollTop;
+    const y2 = linePointBox.y + document.documentElement.scrollTop;
     const xMid = (x1 + x2) / 2;
     const yMid = (y1 + y2) / 2;
 
