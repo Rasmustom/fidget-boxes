@@ -53,13 +53,40 @@ function getDistance(pointA, pointB) {
     return Math.sqrt(d1 + d2);
 }
 
-function addStaticLine(event) {
+function addStaticLine(_event) {
     const line = document.querySelector('#line').cloneNode(true);
-    line.setAttribute('id', '');
-    line.setAttribute('y1', Number(line.getAttribute('y1')) + document.documentElement.scrollTop);
-    line.setAttribute('y2', Number(line.getAttribute('y2')) + document.documentElement.scrollTop);
-    line.setAttribute('x1', Number(line.getAttribute('x1')) + document.documentElement.scrollLeft);
-    line.setAttribute('x2', Number(line.getAttribute('x2')) + document.documentElement.scrollLeft);
     const container = document.querySelector('#static-lines-svg');
+
+    const linePointA = { x: Number(line.getAttribute('x1')), y: Number(line.getAttribute('y1')) };
+    const linePointB = { x: Number(line.getAttribute('x2')), y: Number(line.getAttribute('y2')) };
+
+    const lineLength = Math.round(getDistance(linePointA, linePointB) * 10) / 10;
+
+    // These are needed to account for screen scroll
+    const x1 = linePointA.x + document.documentElement.scrollLeft;
+    const x2 = linePointB.x + document.documentElement.scrollLeft;
+    const y1 = linePointA.y + document.documentElement.scrollTop;
+    const y2 = linePointB.y + document.documentElement.scrollTop;
+    const xMid = (x1 + x2) / 2;
+    const yMid = (y1 + y2) / 2;
+
+    const angle = Math.acos(Math.abs(x1 - x2) / lineLength) * (180 / Math.PI);
+    const angleWithSign = Math.sign(x1 - x2) === Math.sign(y1 - y2) ? angle : angle * -1;
+
+    line.setAttribute('id', '');
+    line.setAttribute('y1', y1);
+    line.setAttribute('y2', y2);
+    line.setAttribute('x1', x1);
+    line.setAttribute('x2', x2);
+
+    let newText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    newText.setAttribute('x', xMid);
+    newText.setAttribute('y', yMid);
+    newText.setAttribute('text-anchor', 'middle');
+    newText.setAttribute('alignment-baseline', 'after-edge');
+    newText.setAttribute(`transform`, `rotate(${angleWithSign}, ${xMid},${yMid})`);
+    newText.innerHTML = `Length: ${lineLength}`;
+
     container.appendChild(line);
+    container.appendChild(newText);
 }
